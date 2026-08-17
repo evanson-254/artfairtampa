@@ -16,8 +16,16 @@ export default function Footer() {
               Four days of creativity, community, and art — all under one roof
               at the Tampa Convention Center.
             </p>
-          <div className="mt-3 space-x-4">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
+            
+          <div className="mt-3 space-x-4 space-y-4">
+            <p>
+              <a href="tel:+1813-463-8435" target="_blank" rel="noopener noreferrer">
+                
+                +1 (813) 463-8435
+                
+              </a>
+            </p>
+            <a href="https://www.instagram.com/tampaartfair?igsh=MW82Zjd1NTY5OXM2Mg==" target="_blank" rel="noopener noreferrer"
               className="group inline-flex items-center justify-center w-12 h-12 rounded-full border border-white/20 transition-colors duration-200 hover:border-red-500">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                 stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
@@ -28,7 +36,7 @@ export default function Footer() {
               </svg>
             </a>
 
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+            <a href="https://www.facebook.com/share/1DRThYgXxF/" target="_blank" rel="noopener noreferrer"
               className="group inline-flex items-center justify-center w-12 h-12 rounded-full border border-white/20 transition-colors duration-200 hover:border-red-500">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                 stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"

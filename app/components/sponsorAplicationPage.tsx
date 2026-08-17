@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import PartnersSponsors from "./sponsor";
+import { useFetcher } from "react-router";
 
 /**
  * Art Fair Tampa — Sponsor Application Page
@@ -181,6 +182,7 @@ export default function SponsorApplicationPage() {
   const [tier, setTier] = useState("");
   const [heardAbout, setHeardAbout] = useState("");
   const [contactTime, setContactTime] = useState("");
+  const fetcher = useFetcher();
 
   const applicationForm = useRef<HTMLFormElement>(null);
   const packagesSection = useRef<HTMLDivElement>(null);
@@ -191,6 +193,11 @@ export default function SponsorApplicationPage() {
   const handlePackagesScroll = () => {
     packagesSection.current?.scrollIntoView({ behavior: "smooth" });
   };
+  const handleSubmit =(e:React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    fetcher.submit(e.currentTarget);
+    // console.log(e.target);
+  }
   return (
     <div className="w-full bg-white">
       {/* HERO */}
@@ -509,23 +516,23 @@ export default function SponsorApplicationPage() {
           Sponsor Application Form
         </h2>
 
-        <form className="space-y-8" onSubmit={(e) => e.preventDefault()}>
+        <fetcher.Form className="space-y-8" method="post" onSubmit={(e) => handleSubmit(e)}>
           <FormField label="Company / Organization Name" required>
-            <input type="text" placeholder="Your Company Name" className={inputClasses} />
+            <input name="company" required type="text" placeholder="Your Company Name" className={inputClasses} />
           </FormField>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <FormField label="Contact Person — First Name" required>
-              <input type="text" placeholder="First" className={inputClasses} />
+              <input name="first" required type="text" placeholder="First" className={inputClasses} />
             </FormField>
             <FormField label="Last Name" required>
-              <input type="text" placeholder="Last" className={inputClasses} />
+              <input type="text" name="last" required placeholder="Last" className={inputClasses} />
             </FormField>
             <FormField label="Email" required>
-              <input type="email" placeholder="you@company.com" className={inputClasses} />
+              <input type="email" name="email" required placeholder="you@company.com" className={inputClasses} />
             </FormField>
             <FormField label="Phone" required>
-              <input type="tel" placeholder="(201) 555-0123" className={inputClasses} />
+              <input type="tel" name="phone" required placeholder="(201) 555-0123" className={inputClasses} />
             </FormField>
           </div>
 
@@ -534,7 +541,7 @@ export default function SponsorApplicationPage() {
           </FormField>
 
           <FormField label="Sponsorship Tier of Interest" required>
-            <select value={tier} onChange={(e) => setTier(e.target.value)} className={inputClasses}>
+            <select value={tier} onChange={(e) => setTier(e.target.value)} className={inputClasses} name="sponsor" required>
               <option value="">— Select a tier —</option>
               {TIERS.map((t) => (
                 <option key={t.name} value={t.name}>
@@ -544,20 +551,21 @@ export default function SponsorApplicationPage() {
             </select>
           </FormField>
           <FormField label="Method of payment" required>
-            <select  className={inputClasses} >
+            <select  className={inputClasses} name="method" required >
               <option value="">— Select a payment method —</option>
               <option value="Zelle">Zelle</option>
               <option value="Venmo">Venmo</option>
               <option value="Aple Pay">Aple Pay</option>
               <option value="Cash App">Cash App</option>
-              <option value="Chine">Chine</option>
+              <option value="Chime">Chime</option>
               <option value="Bank to Bank Transfer">Bank to Bank Transfer</option>
             </select>
           </FormField>
 
-          <FormField label="Why Sponsor Art Fair Tampa?">
+          <FormField label="Why Sponsor Art Fair Tampa?" >
             <textarea
               rows={4}
+              name="why_sponsor"
               placeholder="Share your goals, any brand activation ideas (murals, sculpture, custom experiences), or audience priorities..."
               className="w-full resize-none border border-neutral-300 bg-transparent p-3 text-sm text-neutral-800 outline-none placeholder:text-neutral-400 focus:border-[#0B1320]"
             />
@@ -566,6 +574,8 @@ export default function SponsorApplicationPage() {
           <FormField label="How Did You Hear About Us?" required>
             <select
               value={heardAbout}
+              name="heard_about"
+              required
               onChange={(e) => setHeardAbout(e.target.value)}
               className={inputClasses}
             >
@@ -607,19 +617,24 @@ export default function SponsorApplicationPage() {
           <FormField label="Additional Comments">
             <textarea
               rows={3}
+              name="comment"
               placeholder="Anything else you'd like us to know..."
               className="w-full resize-none border border-neutral-300 bg-transparent p-3 text-sm text-neutral-800 outline-none placeholder:text-neutral-400 focus:border-[#0B1320]"
             />
           </FormField>
-
+            {fetcher.data?.success === true
+              ? <p className="text-xs text-green-500 ">Application submitted successfully!</p>
+              : <p className="text-xs text-red-500">{fetcher.data?.error}</p>
+            }
           <button
             type="submit"
+            disabled={fetcher.state !== "idle"}
             className="flex w-full items-center justify-center gap-2 bg-[#C8102E] px-7 py-4 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-[#a10d26]"
           >
-            Submit Application
-            <ArrowRight size={14} strokeWidth={2.5} />
+            {fetcher.state != "idle" ? "Submitting..." : "Submit Application"}
+            {fetcher.state === "idle" && <ArrowRight size={14} strokeWidth={2.5} />}
           </button>
-        </form>
+        </fetcher.Form>
       </section>
     </div>
   );

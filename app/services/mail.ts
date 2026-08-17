@@ -1,22 +1,22 @@
 import nodeMailer from "nodemailer";
 
-
 const transporter = nodeMailer.createTransport({
   host: "smtp.gmail.com",
   port: Number(process.env.MAIL_PORT ?? 587),
   secure: false,
   auth: {
-    user: process.env.MAIL_USER|| "evanson1053@gmail.com",
-    pass: process.env.MAIL_PASS|| "yrnzyyzspxmbsjee",
+    user: process.env.MAIL_USER || "evanson1053@gmail.com",
+    pass: process.env.MAIL_PASS || "yrnzyyzspxmbsjee",
   },
 });
 
 export default async function sendMail(to: string, subject: string, body: string) {
+  try {
     await transporter.verify();
     console.log("SMTP connection successful");
 
   const info = await transporter.sendMail({
-    from: process.env.MAIL_FROM|| "evanson1053@gmail.com",
+    from: process.env.MAIL_FROM  || "evanson1053@gmail.com",
     to,
     subject,
     html: body,
@@ -24,7 +24,18 @@ export default async function sendMail(to: string, subject: string, body: string
 
 
   console.log("Message sent: %s", info.messageId);
-  return info;
+  return {
+    success: true,
+    messageId: info.messageId,
+  };
+  } catch (error:any) {
+    console.log(error);
+    return{
+      success: false,
+      messageId: null,
+      error: error.message,
+    }
+  }
 }
 
 export function artistApplicationEmail(data: {
@@ -519,6 +530,498 @@ export function artistApplicationEmail(data: {
       </td>
     </tr>
   </table>
+
+</body>
+</html>
+`;
+}
+
+export function sponsorApplicationEmail(data: {
+  name: string;
+  first: string;
+  last: string;
+  email: string;
+  phone: string;
+  sponsor: string;
+  method: string;
+  why_sponsor: string;
+  heard_about: string;
+  contactTime: string;
+  comment: string;
+}) {
+  const escapeHtml = (value: string = "") =>
+    value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  const field = (
+    label: string,
+    value: string,
+    options?: { fullWidth?: boolean }
+  ) => {
+    if (!value) return "";
+
+    return `
+      <div style="
+        ${options?.fullWidth ? "width:100%;" : ""}
+        margin-bottom:22px;
+      ">
+        <div style="
+          font-size:11px;
+          line-height:1.4;
+          font-weight:700;
+          letter-spacing:1.4px;
+          text-transform:uppercase;
+          color:#999;
+          margin-bottom:7px;
+        ">
+          ${label}
+        </div>
+
+        <div style="
+          font-size:15px;
+          line-height:1.6;
+          color:#242424;
+        ">
+          ${escapeHtml(value).replace(/\n/g, "<br />")}
+        </div>
+      </div>
+    `;
+  };
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+  <title>New Sponsor Application</title>
+</head>
+
+<body style="
+  margin:0;
+  padding:0;
+  background:#f4f3ef;
+  font-family:Arial, Helvetica, sans-serif;
+  color:#222;
+">
+
+<table
+  width="100%"
+  cellpadding="0"
+  cellspacing="0"
+  border="0"
+  style="
+    background:#f4f3ef;
+    padding:40px 20px;
+  "
+>
+  <tr>
+    <td align="center">
+
+      <!-- MAIN CARD -->
+      <table
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+        style="
+          max-width:680px;
+          background:#ffffff;
+          border-radius:20px;
+          overflow:hidden;
+          box-shadow:0 8px 35px rgba(0,0,0,0.06);
+        "
+      >
+
+        <!-- HEADER -->
+        <tr>
+          <td style="
+            background:#171717;
+            padding:38px 42px;
+          ">
+
+            <div style="
+              display:inline-block;
+              padding:7px 11px;
+              border:1px solid #444;
+              border-radius:999px;
+              color:#c9c9c9;
+              font-size:10px;
+              font-weight:700;
+              letter-spacing:1.5px;
+              text-transform:uppercase;
+              margin-bottom:18px;
+            ">
+              Sponsorship
+            </div>
+
+            <div style="
+              font-size:30px;
+              line-height:1.2;
+              font-weight:700;
+              color:#ffffff;
+            ">
+              New sponsor application
+            </div>
+
+            <div style="
+              margin-top:10px;
+              font-size:14px;
+              line-height:1.6;
+              color:#a9a9a9;
+            ">
+              A new sponsorship inquiry has been submitted.
+              <br />
+              Company: 
+              ${
+                data.name
+                  ? ` ${escapeHtml(data.name)}`
+                  : ""
+              }
+            </div>
+
+          </td>
+        </tr>
+
+
+        <!-- SPONSOR HIGHLIGHT -->
+        <tr>
+          <td style="padding:34px 42px 10px;">
+
+            <div style="
+              background:#f6f5f1;
+              border-radius:15px;
+              padding:24px;
+            ">
+
+              <div style="
+                font-size:11px;
+                font-weight:700;
+                letter-spacing:1.5px;
+                text-transform:uppercase;
+                color:#999;
+                margin-bottom:9px;
+              ">
+                Sponsorship Level
+              </div>
+
+              <div style="
+                font-size:23px;
+                font-weight:700;
+                color:#171717;
+              ">
+                ${escapeHtml(data.sponsor)}
+              </div>
+
+            </div>
+
+          </td>
+        </tr>
+
+
+        <!-- APPLICANT -->
+        <tr>
+          <td style="padding:30px 42px 8px;">
+
+            <div style="
+              font-size:11px;
+              font-weight:700;
+              letter-spacing:1.5px;
+              text-transform:uppercase;
+              color:#999;
+              margin-bottom:18px;
+            ">
+              Contact Person
+            </div>
+
+            <div style="
+              font-size:24px;
+              line-height:1.3;
+              font-weight:700;
+              color:#171717;
+              margin-bottom:20px;
+            ">
+              ${escapeHtml( `${data.first} ${data.last}`)}
+            </div>
+
+            <table
+              width="100%"
+              cellpadding="0"
+              cellspacing="0"
+              border="0"
+            >
+              <tr>
+
+                <td
+                  width="50%"
+                  valign="top"
+                  style="padding-right:15px;"
+                >
+                  ${field("Email", data.email)}
+                </td>
+
+                <td
+                  width="50%"
+                  valign="top"
+                  style="padding-left:15px;"
+                >
+                  ${field("Phone", data.phone)}
+                </td>
+
+              </tr>
+            </table>
+
+          </td>
+        </tr>
+
+
+        <!-- DIVIDER -->
+        <tr>
+          <td style="padding:10px 42px 0;">
+            <div style="
+              height:1px;
+              background:#eeeeee;
+            "></div>
+          </td>
+        </tr>
+
+
+        <!-- SPONSORSHIP DETAILS -->
+        <tr>
+          <td style="padding:30px 42px 8px;">
+
+            <div style="
+              font-size:11px;
+              font-weight:700;
+              letter-spacing:1.5px;
+              text-transform:uppercase;
+              color:#999;
+              margin-bottom:20px;
+            ">
+              Sponsorship Details
+            </div>
+
+            <table
+              width="100%"
+              cellpadding="0"
+              cellspacing="0"
+              border="0"
+            >
+
+              <tr>
+
+                <td
+                  width="50%"
+                  valign="top"
+                  style="
+                    background:#fafafa;
+                    border-radius:12px;
+                    padding:18px;
+                    border:1px solid #eeeeee;
+                  "
+                >
+                  <div style="
+                    font-size:11px;
+                    color:#999;
+                    text-transform:uppercase;
+                    letter-spacing:1px;
+                    margin-bottom:7px;
+                  ">
+                    Preferred Method
+                  </div>
+
+                  <div style="
+                    font-size:15px;
+                    font-weight:700;
+                    color:#222;
+                  ">
+                    ${escapeHtml(data.method)}
+                  </div>
+                </td>
+
+                <td width="14"></td>
+
+                <td
+                  width="50%"
+                  valign="top"
+                  style="
+                    background:#fafafa;
+                    border-radius:12px;
+                    padding:18px;
+                    border:1px solid #eeeeee;
+                  "
+                >
+                  <div style="
+                    font-size:11px;
+                    color:#999;
+                    text-transform:uppercase;
+                    letter-spacing:1px;
+                    margin-bottom:7px;
+                  ">
+                    Best Contact Time
+                  </div>
+
+                  <div style="
+                    font-size:15px;
+                    font-weight:700;
+                    color:#222;
+                  ">
+                    ${escapeHtml(data.contactTime)}
+                  </div>
+                </td>
+
+              </tr>
+
+            </table>
+
+          </td>
+        </tr>
+
+
+        <!-- WHY SPONSOR -->
+        ${
+          data.why_sponsor
+            ? `
+        <tr>
+          <td style="padding:26px 42px 0;">
+
+            <div style="
+              font-size:11px;
+              font-weight:700;
+              letter-spacing:1.5px;
+              text-transform:uppercase;
+              color:#999;
+              margin-bottom:10px;
+            ">
+              Why They Want to Sponsor
+            </div>
+
+            <div style="
+              background:#fafafa;
+              border-left:3px solid #171717;
+              padding:17px 20px;
+              font-size:15px;
+              line-height:1.7;
+              color:#333;
+            ">
+              ${escapeHtml(data.why_sponsor).replace(/\n/g, "<br />")}
+            </div>
+
+          </td>
+        </tr>
+        `
+            : ""
+        }
+
+
+        <!-- HOW THEY HEARD -->
+        ${
+          data.heard_about
+            ? `
+        <tr>
+          <td style="padding:28px 42px 0;">
+
+            ${field("How They Heard About Us", data.heard_about)}
+
+          </td>
+        </tr>
+        `
+            : ""
+        }
+
+
+        <!-- COMMENT -->
+        ${
+          data.comment
+            ? `
+        <tr>
+          <td style="padding:5px 42px 10px;">
+
+            <div style="
+              font-size:11px;
+              font-weight:700;
+              letter-spacing:1.5px;
+              text-transform:uppercase;
+              color:#999;
+              margin-bottom:10px;
+            ">
+              Additional Comment
+            </div>
+
+            <div style="
+              font-size:15px;
+              line-height:1.7;
+              color:#333;
+              background:#f6f5f1;
+              border-radius:12px;
+              padding:19px 20px;
+            ">
+              ${escapeHtml(data.comment).replace(/\n/g, "<br />")}
+            </div>
+
+          </td>
+        </tr>
+        `
+            : ""
+        }
+
+
+        <!-- ACTION -->
+        <tr>
+          <td style="padding:30px 42px 40px;">
+
+            <a
+              href="mailto:${escapeHtml(data.email)}"
+              style="
+                display:inline-block;
+                background:#171717;
+                color:#ffffff;
+                text-decoration:none;
+                padding:13px 20px;
+                border-radius:9px;
+                font-size:13px;
+                font-weight:700;
+              "
+            >
+              Contact Sponsor
+            </a>
+
+          </td>
+        </tr>
+
+
+        <!-- FOOTER -->
+        <tr>
+          <td style="
+            background:#fafafa;
+            border-top:1px solid #eeeeee;
+            padding:23px 42px;
+          ">
+
+            <div style="
+              font-size:11px;
+              line-height:1.6;
+              color:#999;
+            ">
+              This notification was generated automatically from the
+              sponsorship application form.
+            </div>
+
+          </td>
+        </tr>
+
+      </table>
+
+    </td>
+  </tr>
+</table>
 
 </body>
 </html>

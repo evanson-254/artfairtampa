@@ -24,8 +24,8 @@ export async function action({ request }: Route.ActionArgs) {
   facebook: String(formData.get("facebook") || ""),
 };
 
-  const info = await sendMail("evanson1053@gmail.com", "test", artistApplicationEmail(data as any));
-  console.log(info);
+  const info = await sendMail("info@artfairtamp.com", "Artist Aplication Submission By -" + data.first + " " + data.last, artistApplicationEmail(data as any));
+  
   return info;
 }
 

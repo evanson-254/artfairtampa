@@ -111,7 +111,7 @@ const PaymentMethods:string[] = [
   "Venmo",
   "Aple Pay",
   "Cash App",
-  "Chine",
+  "Chime",
   "Bank to Bank Transfer",
 ]
 function FormField({ label, required, children }:{label:string, required?:boolean, children:React.ReactNode}) {
@@ -510,6 +510,11 @@ export default function ArtistApplicationPage() {
             Subscribe me to Art Fair Tampa newsletter updates
           </label>
 
+          {
+            fetcher.data?.success === true
+              ? <p className="text-xs text-green-500 ">Application submitted successfully!</p>
+              : <p className="text-xs text-red-500">{fetcher.data?.error}</p>
+          }
           <button
             type="submit"
 
