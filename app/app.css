@@ -123,8 +123,29 @@
     }
   body {
     @apply bg-background text-foreground;
+
     }
+    body {
+  font-family: "Inter", sans-serif;
+}
+
+.font-serif {
+  font-family: "Cormorant Garamond", serif;
+}
   html {
     @apply font-sans;
     }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 28s linear infinite;
 }
