@@ -1,7 +1,7 @@
 import Footer from "~/components/footer";
 import Navbar from "~/components/navbar";
 import SponsorApplicationPage from "~/components/sponsorAplicationPage";
-import sendMail, { artistApplicationEmail, sponsorApplicationEmail } from "~/services/mail";
+import sendMail, {  sponsorApplicationEmail } from "~/services/mail";
 import type { Route } from "./+types/sponsor";
 
 export async function action({ request }: Route.ActionArgs) {
@@ -29,7 +29,7 @@ export async function action({ request }: Route.ActionArgs) {
   return info;
 }
 
-export default function Artist() {
+export default function Sponsor() {
   return (
     <>
       <title>Art Fair Tampa | Sponsor</title>
