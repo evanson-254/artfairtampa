@@ -109,7 +109,7 @@ const MEDIUMS = [
 const PaymentMethods:string[] = [  
   "Zelle",
   "Venmo",
-  "Aple Pay",
+  "Apple Pay",
   "Cash App",
   "Chime",
   "Bank to Bank Transfer",

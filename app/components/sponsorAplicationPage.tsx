@@ -555,7 +555,7 @@ export default function SponsorApplicationPage() {
               <option value="">— Select a payment method —</option>
               <option value="Zelle">Zelle</option>
               <option value="Venmo">Venmo</option>
-              <option value="Aple Pay">Aple Pay</option>
+              <option value="Apple Pay">Apple Pay</option>
               <option value="Cash App">Cash App</option>
               <option value="Chime">Chime</option>
               <option value="Bank to Bank Transfer">Bank to Bank Transfer</option>
